@@ -8,7 +8,7 @@ import android.provider.ContactsContract;
 /**
  * Created by Chandrakanth on 26-05-2016.
  */
-public class Utils {
+public class ContactUtils {
 
     private final static String[] PROJECTION = {
             ContactsContract.Contacts._ID,

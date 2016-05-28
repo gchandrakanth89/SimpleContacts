@@ -132,9 +132,9 @@ public class ContactsListFragment extends Fragment {
         @Override
         public void run() {
             if (TextUtils.isEmpty(search)) {
-                searchCursor = Utils.getAllContactsCursor(getActivity());
+                searchCursor = ContactUtils.getAllContactsCursor(getActivity());
             } else {
-                searchCursor = Utils.getSearchCursor(getActivity(), search);
+                searchCursor = ContactUtils.getSearchCursor(getActivity(), search);
             }
             Message message = Message.obtain();
             message.obj = search;
