@@ -24,6 +24,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        if(BuildConfig.DEBUG){
+            LogUtils.enableStrictMode();
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 

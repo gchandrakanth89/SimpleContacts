@@ -57,7 +57,6 @@ public class ContactsAdapter extends CursorAdapter {
             nameTv.setText(contactName, TextView.BufferType.SPANNABLE);
 
         }
-        nameTv.setText(contactName);
     }
 
     public void changeCursor(Cursor cursor, String spanString) {
