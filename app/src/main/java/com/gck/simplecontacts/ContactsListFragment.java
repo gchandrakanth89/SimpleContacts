@@ -1,8 +1,13 @@
 package com.gck.simplecontacts;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -21,7 +26,22 @@ public class ContactsListFragment extends Fragment {
     private ListView listView;
     private ContactsAdapter contactsAdapter;
     private Cursor searchCursor;
-    private Cursor allContactsCursor;
+    private LooperThread looperThread;
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (contactsAdapter == null) {
+                contactsAdapter = new ContactsAdapter(getActivity(), searchCursor);
+                listView.setAdapter(contactsAdapter);
+            } else {
+                String searchStr = (String) msg.obj;
+                contactsAdapter.changeCursor(searchCursor, searchStr);
+            }
+        }
+    };
+
 
     public ContactsListFragment() {
     }
@@ -34,11 +54,27 @@ public class ContactsListFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        looperThread = new LooperThread();
+        looperThread.start();
+        Log.d(TAG, "Chandu onAttach context");
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        looperThread = new LooperThread();
+        looperThread.start();
+        Log.d(TAG, "Chandu onAttach Activity");
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,9 +83,8 @@ public class ContactsListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_contacts_list, container, false);
 
         listView = (ListView) view.findViewById(R.id.list_view);
-        allContactsCursor = Utils.getAllContactsCursor(getActivity());
-        contactsAdapter = new ContactsAdapter(getActivity(), allContactsCursor);
-        listView.setAdapter(contactsAdapter);
+        Thread thread = new Thread(new MyRunnable(null));
+        thread.start();
 
         EditText editText = (EditText) view.findViewById(R.id.edit_text);
         editText.addTextChangedListener(textWatcher);
@@ -59,11 +94,13 @@ public class ContactsListFragment extends Fragment {
 
     @Override
     public void onDetach() {
-        allContactsCursor.close();
-        if(searchCursor!=null){
-            Log.d(TAG,"Closing cursor");
+        if (searchCursor != null) {
+            Log.d(TAG, "Closing cursor");
             searchCursor.close();
         }
+
+        looperThread.quitLooper();
+        handler.removeCallbacksAndMessages(null);
         super.onDetach();
     }
 
@@ -75,13 +112,7 @@ public class ContactsListFragment extends Fragment {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (TextUtils.isEmpty(s)) {
-                searchCursor = Utils.getAllContactsCursor(getActivity());
-            } else {
-                searchCursor = Utils.getSearchCursor(getActivity(), s.toString());
-            }
-            contactsAdapter.changeCursor(searchCursor, s.toString());
-
+            looperThread.post(s.toString());
         }
 
         @Override
@@ -90,6 +121,46 @@ public class ContactsListFragment extends Fragment {
         }
     };
 
+    private class MyRunnable implements Runnable {
+
+        private String search;
+
+        public MyRunnable(String search) {
+            this.search = search;
+        }
+
+        @Override
+        public void run() {
+            if (TextUtils.isEmpty(search)) {
+                searchCursor = Utils.getAllContactsCursor(getActivity());
+            } else {
+                searchCursor = Utils.getSearchCursor(getActivity(), search);
+            }
+            Message message = Message.obtain();
+            message.obj = search;
+            handler.sendMessage(message);
+        }
+    }
+
+    private class LooperThread extends Thread {
+        private Handler bgHandler;
+
+        @Override
+        public void run() {
+            Looper.prepare();
+            bgHandler = new Handler();
+            Looper.loop();
+        }
+
+        public void post(String search) {
+            bgHandler.removeCallbacksAndMessages(null);
+            bgHandler.post(new MyRunnable(search));
+        }
+
+        public void quitLooper() {
+            bgHandler.getLooper().quit();
+        }
+    }
 
 }
 
