@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
     private void getContactPhoneNumber(int id) {
         String[] PROJECTION = {ContactsContract.CommonDataKinds.Phone._ID,
                 ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER,
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
                 ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME};
 
         String SELECTION = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?";

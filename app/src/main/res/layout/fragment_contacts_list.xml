@@ -4,16 +4,33 @@
                 android:layout_height="match_parent"
                 tools:context="com.gck.simplecontacts.ContactsListFragment">
 
-    <EditText
-        android:id="@+id/edit_text"
+    <LinearLayout
+        android:id="@+id/edit_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:background="#ffcccccc"
+        android:padding="10dp">
+
+        <EditText
+            android:id="@+id/edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/search_bar"
+            android:drawableLeft="@drawable/search_unselected"
+            android:drawablePadding="10dp"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:textSize="20sp"/>
+    </LinearLayout>
 
     <ListView
         android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/edit_text"
+        android:layout_below="@+id/edit_layout"
+        android:divider="#ccccccff"
+        android:dividerHeight="0.5dp"
         />
 
 </RelativeLayout>

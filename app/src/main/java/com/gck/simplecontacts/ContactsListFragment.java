@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -41,6 +43,7 @@ public class ContactsListFragment extends Fragment {
             }
         }
     };
+    private EditText editText;
 
 
     public ContactsListFragment() {
@@ -83,14 +86,24 @@ public class ContactsListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_contacts_list, container, false);
 
         listView = (ListView) view.findViewById(R.id.list_view);
-        Thread thread = new Thread(new MyRunnable(null));
-        thread.start();
+        looperThread.post(null);
+        listView.setOnItemClickListener(listListener);
 
-        EditText editText = (EditText) view.findViewById(R.id.edit_text);
+        editText = (EditText) view.findViewById(R.id.edit_text);
         editText.addTextChangedListener(textWatcher);
-
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         return view;
     }
+
+    AdapterView.OnItemClickListener listListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Cursor cursor = (Cursor) parent.getItemAtPosition(position);
+
+            int contactId = cursor.getInt(0);
+            Log.d(TAG, "Chandu " + contactId);
+        }
+    };
 
     @Override
     public void onDetach() {
@@ -112,6 +125,11 @@ public class ContactsListFragment extends Fragment {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (count == 0) {
+                editText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.search_unselected, 0, 0, 0);
+            } else {
+                editText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.search_selected, 0, 0, 0);
+            }
             looperThread.post(s.toString());
         }
 
