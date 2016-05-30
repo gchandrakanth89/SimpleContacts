@@ -2,12 +2,15 @@ package com.gck.simplecontacts;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -99,9 +102,14 @@ public class ContactsListFragment extends Fragment {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Cursor cursor = (Cursor) parent.getItemAtPosition(position);
+            int contactId = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts._ID));
 
-            int contactId = cursor.getInt(0);
-            Log.d(TAG, "Chandu " + contactId);
+            ContactDetailsFragment contactDetailsFragment = ContactDetailsFragment.newInstance(contactId);
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.frag_container,contactDetailsFragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
         }
     };
 
