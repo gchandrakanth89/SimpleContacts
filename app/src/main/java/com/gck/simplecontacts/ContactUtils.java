@@ -27,7 +27,33 @@ public class ContactUtils {
         Uri searchUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_FILTER_URI, Uri.encode(search));
         String SELECTION = ContactsContract.Contacts.DISPLAY_NAME_PRIMARY + " like ?";
         String[] selectionArgs = {'%' + search + '%'};
-        return context.getContentResolver().query(searchUri, PROJECTION,SELECTION , selectionArgs, ContactsContract.Contacts.DISPLAY_NAME_PRIMARY);
+        return context.getContentResolver().query(searchUri, PROJECTION, SELECTION, selectionArgs, ContactsContract.Contacts.DISPLAY_NAME_PRIMARY);
+    }
+
+    public static String[] getContactPhoneNumber(Context context, int id) {
+        String[] PROJECTION = {ContactsContract.CommonDataKinds.Phone._ID,
+                ContactsContract.CommonDataKinds.Phone.NUMBER,
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME};
+
+        String SELECTION = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?";
+        String[] selectionArgs = {id + ""};
+
+        Cursor cursor = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, PROJECTION, SELECTION, selectionArgs, null, null);
+
+        String[] numbers = new String[cursor.getCount()];
+
+        int i = 0;
+        while (cursor.moveToNext()) {
+            int numId = cursor.getInt(0);
+            numbers[i] = cursor.getString(1);
+            String name = cursor.getString(2);
+            i++;
+        }
+
+        cursor.close();
+
+        return numbers;
     }
 
 }

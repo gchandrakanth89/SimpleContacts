@@ -5,9 +5,10 @@
                 android:background="?android:attr/windowBackground"
                 tools:context="com.gck.simplecontacts.ContactDetailsFragment">
 
-    <TextView
+    <ListView
+        android:id="@+id/numbers_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment"/>
+        android:divider="@null"/>
 
 </RelativeLayout>

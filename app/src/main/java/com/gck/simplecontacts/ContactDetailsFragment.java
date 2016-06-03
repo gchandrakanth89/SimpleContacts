@@ -2,11 +2,13 @@ package com.gck.simplecontacts;
 
 
 import android.app.Fragment;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 
 public class ContactDetailsFragment extends Fragment {
@@ -14,6 +16,8 @@ public class ContactDetailsFragment extends Fragment {
     private static final String TAG = "ContactDetailsFragment";
 
     private int contactId;
+    private ListView listView;
+    private NumbersAdapter numbersAdapter;
 
 
     public ContactDetailsFragment() {
@@ -40,6 +44,10 @@ public class ContactDetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         Log.d(TAG, "Contact id " + contactId);
         View view = inflater.inflate(R.layout.fragment_contact_details, container, false);
+
+        listView = (ListView) view.findViewById(R.id.numbers_list_view);
+        numbersAdapter = new NumbersAdapter(getActivity(), ContactUtils.getContactPhoneNumber(getActivity(), contactId));
+        listView.setAdapter(numbersAdapter);
         return view;
     }
 
