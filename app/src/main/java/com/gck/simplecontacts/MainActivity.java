@@ -1,11 +1,14 @@
 package com.gck.simplecontacts;
 
-import android.app.FragmentTransaction;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Contacts;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -25,11 +28,20 @@ public class MainActivity extends AppCompatActivity {
 
         if(savedInstanceState==null){
             ContactsListFragment contactsListFragment = ContactsListFragment.newInstance();
-            android.app.FragmentManager fragmentManager=getFragmentManager();
+            FragmentManager fragmentManager=getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.add(R.id.frag_container,contactsListFragment);
             fragmentTransaction.commit();
         }
+
+        TabLayout tabLayout= (TabLayout) findViewById(R.id.tab_layout);
+        TabLayout.Tab contacts = tabLayout.newTab().setText("Contacts");
+        TabLayout.Tab calls = tabLayout.newTab().setText("Calls");
+        tabLayout.addTab(contacts);
+        tabLayout.addTab(calls);
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        tabLayout.setTabTextColors(Color.WHITE,Color.GREEN);
 
     }
 
