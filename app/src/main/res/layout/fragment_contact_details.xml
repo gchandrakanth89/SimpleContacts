@@ -5,10 +5,23 @@
                 android:background="?android:attr/windowBackground"
                 tools:context="com.gck.simplecontacts.ContactDetailsFragment">
 
+
+    <TextView
+        android:id="@+id/name_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/number_item_bg"
+        android:gravity="center"
+        android:padding="20dp"
+        android:textSize="40sp"
+        tools:text="Chandu"
+        />
+
     <ListView
         android:id="@+id/numbers_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/name_tv"
         android:divider="@null"/>
 
 </RelativeLayout>

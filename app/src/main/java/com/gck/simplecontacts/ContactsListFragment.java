@@ -103,11 +103,12 @@ public class ContactsListFragment extends Fragment {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Cursor cursor = (Cursor) parent.getItemAtPosition(position);
             int contactId = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+            String contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY));
 
-            ContactDetailsFragment contactDetailsFragment = ContactDetailsFragment.newInstance(contactId);
+            ContactDetailsFragment contactDetailsFragment = ContactDetailsFragment.newInstance(contactId, contactName);
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.frag_container,contactDetailsFragment);
+            fragmentTransaction.add(R.id.frag_container, contactDetailsFragment);
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
