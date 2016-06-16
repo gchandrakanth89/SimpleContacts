@@ -26,14 +26,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //        if(savedInstanceState==null){
-        //            ContactsListFragment contactsListFragment = ContactsListFragment.newInstance();
-        //            FragmentManager fragmentManager=getSupportFragmentManager();
-        //            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        //            fragmentTransaction.add(R.id.frag_container,contactsListFragment);
-        //            fragmentTransaction.commit();
-        //        }
-
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         TabLayout.Tab contacts = tabLayout.newTab().setText("Contacts");
         TabLayout.Tab calls = tabLayout.newTab().setText("Calls");
@@ -44,9 +36,29 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setTabTextColors(Color.WHITE, Color.GREEN);
 
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         pagerAdapter = new PagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
+
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
     }
 
