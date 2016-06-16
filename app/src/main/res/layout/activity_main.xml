@@ -15,10 +15,18 @@
         android:elevation="6dp"
         android:minHeight="?attr/actionBarSize"/>
 
-    <FrameLayout
-        android:id="@+id/frag_container"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/tab_layout">
-    </FrameLayout>
+        android:layout_height="fill_parent"
+        android:layout_below="@id/tab_layout"/>
+
+    <!--
+        <FrameLayout
+            android:id="@+id/frag_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tab_layout">
+        </FrameLayout>
+    -->
 </RelativeLayout>

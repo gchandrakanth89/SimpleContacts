@@ -20,7 +20,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
             case 0:
                 return ContactsListFragment.newInstance();
             case 1:
-                return CallsFragment.newInstance("","");
+                return CallsFragment.newInstance("", "");
         }
 
         return null;
@@ -28,6 +28,6 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 0;
+        return 2;
     }
 }

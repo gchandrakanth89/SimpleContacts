@@ -7,43 +7,49 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Contacts;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+    private PagerAdapter pagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        if(BuildConfig.DEBUG){
+        if (BuildConfig.DEBUG) {
             LogUtils.enableStrictMode();
         }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if(savedInstanceState==null){
-            ContactsListFragment contactsListFragment = ContactsListFragment.newInstance();
-            FragmentManager fragmentManager=getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.frag_container,contactsListFragment);
-            fragmentTransaction.commit();
-        }
+        //        if(savedInstanceState==null){
+        //            ContactsListFragment contactsListFragment = ContactsListFragment.newInstance();
+        //            FragmentManager fragmentManager=getSupportFragmentManager();
+        //            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        //            fragmentTransaction.add(R.id.frag_container,contactsListFragment);
+        //            fragmentTransaction.commit();
+        //        }
 
-        TabLayout tabLayout= (TabLayout) findViewById(R.id.tab_layout);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         TabLayout.Tab contacts = tabLayout.newTab().setText("Contacts");
         TabLayout.Tab calls = tabLayout.newTab().setText("Calls");
         tabLayout.addTab(contacts);
         tabLayout.addTab(calls);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        tabLayout.setTabTextColors(Color.WHITE,Color.GREEN);
+        tabLayout.setTabTextColors(Color.WHITE, Color.GREEN);
+
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(pagerAdapter);
 
     }
+
 
     private void listAllContacts() {
 

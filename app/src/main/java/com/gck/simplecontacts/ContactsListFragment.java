@@ -9,8 +9,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -105,12 +103,12 @@ public class ContactsListFragment extends Fragment {
             int contactId = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts._ID));
             String contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY));
 
-            ContactDetailsFragment contactDetailsFragment = ContactDetailsFragment.newInstance(contactId, contactName);
-            FragmentManager fragmentManager = getFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.frag_container, contactDetailsFragment);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
+            //ContactDetailsFragment contactDetailsFragment = ContactDetailsFragment.newInstance(contactId, contactName);
+            //FragmentManager fragmentManager = getFragmentManager();
+            //FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            //fragmentTransaction.add(R.id.frag_container, contactDetailsFragment);
+            //fragmentTransaction.addToBackStack(null);
+            //fragmentTransaction.commit();
         }
     };
 
