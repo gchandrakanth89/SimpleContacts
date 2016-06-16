@@ -103,12 +103,8 @@ public class ContactsListFragment extends Fragment {
             int contactId = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts._ID));
             String contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY));
 
-            //ContactDetailsFragment contactDetailsFragment = ContactDetailsFragment.newInstance(contactId, contactName);
-            //FragmentManager fragmentManager = getFragmentManager();
-            //FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            //fragmentTransaction.add(R.id.frag_container, contactDetailsFragment);
-            //fragmentTransaction.addToBackStack(null);
-            //fragmentTransaction.commit();
+            ContactDetailsActivity.startActivity(getActivity(),contactId,contactName);
+
         }
     };
 
