@@ -1,8 +1,11 @@
 package com.gck.simplecontacts;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -60,19 +63,19 @@ public class ContactsListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        looperThread = new LooperThread();
-        looperThread.start();
-        Log.d(TAG, "Chandu onAttach context");
-    }
+            looperThread = new LooperThread();
+            looperThread.start();
+            Log.d(TAG, "Chandu onAttach context");
+        }
 
     @SuppressWarnings("deprecation")
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        looperThread = new LooperThread();
-        looperThread.start();
-        Log.d(TAG, "Chandu onAttach Activity");
-    }
+            looperThread = new LooperThread();
+            looperThread.start();
+            Log.d(TAG, "Chandu onAttach Activity");
+        }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,6 +92,7 @@ public class ContactsListFragment extends Fragment {
         listView = (ListView) view.findViewById(R.id.list_view);
         looperThread.post(null);
         listView.setOnItemClickListener(listListener);
+        listView.setOnItemLongClickListener(onItemLongClickListener);
 
         editText = (EditText) view.findViewById(R.id.edit_text);
         editText.addTextChangedListener(textWatcher);
@@ -103,8 +107,36 @@ public class ContactsListFragment extends Fragment {
             int contactId = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts._ID));
             String contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY));
 
-            ContactDetailsActivity.startActivity(getActivity(),contactId,contactName);
+            ContactDetailsActivity.startActivity(getActivity(), contactId, contactName);
 
+        }
+    };
+
+    AdapterView.OnItemLongClickListener onItemLongClickListener = new AdapterView.OnItemLongClickListener() {
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+            Cursor cursor = (Cursor) parent.getItemAtPosition(position);
+            final int contactId = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+            final String lookupKey = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
+            String contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY));
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Alert");
+            builder.setMessage("Do you want to delete " + contactName);
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, Uri.encode(lookupKey));
+                    int delete = getActivity().getContentResolver().delete(uri, null, null);
+                    Log.d(TAG, delete + "");
+                }
+            });
+            builder.setNegativeButton("Cancel", null);
+
+            builder.show();
+
+            return true;
         }
     };
 
@@ -174,9 +206,9 @@ public class ContactsListFragment extends Fragment {
         }
 
         public void post(String search) {
-            bgHandler.removeCallbacksAndMessages(null);
-            bgHandler.post(new MyRunnable(search));
-        }
+                bgHandler.removeCallbacksAndMessages(null);
+                bgHandler.post(new MyRunnable(search));
+            }
 
         public void quitLooper() {
             bgHandler.getLooper().quit();
