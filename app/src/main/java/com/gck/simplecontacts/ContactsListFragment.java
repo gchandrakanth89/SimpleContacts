@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -63,19 +64,23 @@ public class ContactsListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             looperThread = new LooperThread();
             looperThread.start();
             Log.d(TAG, "Chandu onAttach context");
         }
+    }
 
     @SuppressWarnings("deprecation")
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             looperThread = new LooperThread();
             looperThread.start();
             Log.d(TAG, "Chandu onAttach Activity");
         }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -206,9 +211,14 @@ public class ContactsListFragment extends Fragment {
         }
 
         public void post(String search) {
+
+            //Sometimes it takes time to prepare the loop. So calling post()
+            // immediately after run() method will give NPE
+            if (bgHandler != null) {
                 bgHandler.removeCallbacksAndMessages(null);
                 bgHandler.post(new MyRunnable(search));
             }
+        }
 
         public void quitLooper() {
             bgHandler.getLooper().quit();
